@@ -18,11 +18,13 @@ jobs:
           browser: chrome
           wait-on: http://localhost:4173
   after_success:
-    - name: After_success
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const fs = require('fs');
-          const path = require('path');
-          const result = 200
-          fs.writeFileSync(path.resolve(__dirname, 'result.txt'), result)
+    runs-on: ubuntu-22.04
+    steps:
+      - name: success
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const result = 200
+            fs.writeFileSync(path.resolve(__dirname, 'result.txt'), result)

@@ -18,7 +18,7 @@ jobs:
           browser: chrome
           wait-on: http://localhost:4173
   after_success:
-    - name: After success
+    - name: After_success
       uses: actions/github-script@v6
       with:
         script: |

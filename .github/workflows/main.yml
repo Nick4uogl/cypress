@@ -5,6 +5,10 @@ on: push
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,6 +32,11 @@ jobs:
           start: npm run preview
           browser: chrome
           wait-on: http://localhost:4173
+          record: true
+          parallel: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
   after_success:
     needs: cypress-run
     runs-on: ubuntu-22.04

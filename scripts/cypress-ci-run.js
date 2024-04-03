@@ -25,7 +25,7 @@ function getArgs() {
   try {
     const { totalRunners, thisRunner } = getArgs();
 
-    const command = `npx cypress run --spec cypress/e2e/spec.cy.js`;
+    const command = `npx cypress run --spec "$(node scripts/cypress-spec-split.js ${totalRunners} ${thisRunner})"`;
 
     console.log(`Running: ${command}`);
 

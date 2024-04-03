@@ -10,8 +10,6 @@ const specPatterns = {
   specPattern: "cypress/e2e/**/*.cy.{ts,tsx,js,jsx}",
 };
 
-console.log("specPatterns", specPatterns);
-
 // used to roughly determine how many tests are in a file
 const testPattern = /(^|\s)(it|test)\(/g;
 

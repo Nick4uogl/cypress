@@ -1,13 +1,13 @@
-import fs from 'fs/promises';
-import globby from 'globby';
-import minimatch from 'minimatch';
+import fs from "fs/promises";
+import { globby } from "globby";
+import { minimatch } from "minimatch";
 
 // These are the same properties that are set in cypress.config.
 // In practice, it's better to export these from another file, and
 // import them here and in cypress.config, so that both files use
 // the same values.
 const specPatterns = {
-  specPattern: 'cypress/e2e/**/*.cy.{ts,tsx,js,jsx}',
+  specPattern: "cypress/e2e/**/*.cy.{ts,tsx,js,jsx}",
 };
 
 // used to roughly determine how many tests are in a file
@@ -19,25 +19,25 @@ function getArgs() {
   const [totalRunnersStr, thisRunnerStr] = process.argv.splice(2);
 
   if (!totalRunnersStr || !thisRunnerStr) {
-    throw new Error('Missing arguments');
+    throw new Error("Missing arguments");
   }
 
   const totalRunners = totalRunnersStr ? Number(totalRunnersStr) : 0;
   const thisRunner = thisRunnerStr ? Number(thisRunnerStr) : 0;
 
   if (isNaN(totalRunners)) {
-    throw new Error('Invalid total runners.');
+    throw new Error("Invalid total runners.");
   }
 
   if (isNaN(thisRunner)) {
-    throw new Error('Invalid runner.');
+    throw new Error("Invalid runner.");
   }
 
   return { totalRunners, thisRunner };
 }
 
 async function getTestCount(filePath) {
-  const content = await fs.readFile(filePath, 'utf8');
+  const content = await fs.readFile(filePath, "utf8");
   return (content.match(testPattern) || []).length || 0;
 }
 
@@ -83,23 +83,23 @@ function splitSpecs(specs, totalRunners, thisRunner) {
 
   try {
     const specFilePaths = await sortSpecFilesByTestCount(
-      await getSpecFilePaths(),
+      await getSpecFilePaths()
     );
 
-    console.log('specFilePaths', specFilePaths);
+    console.log("specFilePaths", specFilePaths);
 
     if (!specFilePaths.length) {
-      throw Error('No spec files found.');
+      throw Error("No spec files found.");
     }
 
     const { totalRunners, thisRunner } = getArgs();
 
-    console.log('totalRunners', totalRunners);
-    console.log('thisRunner', thisRunner);
+    console.log("totalRunners", totalRunners);
+    console.log("thisRunner", thisRunner);
 
     const specsToRun = splitSpecs(specFilePaths, totalRunners, thisRunner);
 
-    console.log(specsToRun.join(','));
+    console.log(specsToRun.join(","));
   } catch (err) {
     console.error(err);
     process.exit(1);

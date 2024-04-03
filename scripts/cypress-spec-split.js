@@ -81,6 +81,8 @@ function splitSpecs(specs, totalRunners, thisRunner) {
     return;
   }
 
+  console.log("start");
+
   try {
     const specFilePaths = await sortSpecFilesByTestCount(
       await getSpecFilePaths()

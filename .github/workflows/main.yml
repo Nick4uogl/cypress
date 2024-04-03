@@ -3,6 +3,30 @@ name: Cypress Tests
 on: push
 
 jobs:
+ build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # - name: Setup Node
+      #   uses: actions/setup-node@v2.1.2
+      #   with:
+      #     node-version: 18.14.0
+
+      - name: Install packages
+        run: npm run install --frozen-lockfile
+      # Build app
+      - name: Build App
+        run: npm run build
+      - name: Save build folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-build
+          if-no-files-found: error
+          path: build
+          retention-days: 1
   cypress-run:
     runs-on: ubuntu-22.04
     strategy:
@@ -10,8 +34,15 @@ jobs:
       matrix:
         containers: [0, 1]
     steps:
+      - name: Download the build
+        uses: actions/download-artifact@v2
+        with:
+          name: the-build
+          path: build
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install packages
+        run: npm run install --frozen-lockfile
       # Install npm dependencies, cache them correctly
       # and run all Cypress tests
       - name: Determine Tests to Run
@@ -28,7 +59,6 @@ jobs:
         if: steps.check_commit_message.outputs.skip_tests != 'true'
         uses: cypress-io/github-action@v6
         with:
-          build: npm run build
           start: npm run preview
           browser: chrome
           wait-on: http://localhost:4173

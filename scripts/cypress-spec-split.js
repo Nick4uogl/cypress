@@ -86,20 +86,15 @@ function splitSpecs(specs, totalRunners, thisRunner) {
       await getSpecFilePaths()
     );
 
-    console.log("specFilePaths", specFilePaths);
-
     if (!specFilePaths.length) {
       throw Error("No spec files found.");
     }
 
     const { totalRunners, thisRunner } = getArgs();
 
-    console.log("totalRunners", totalRunners);
-    console.log("thisRunner", thisRunner);
-
     const specsToRun = splitSpecs(specFilePaths, totalRunners, thisRunner);
 
-    console.log(specsToRun.join(","));
+    console.log("specsToRun", specsToRun.join(","));
   } catch (err) {
     console.error(err);
     process.exit(1);

@@ -32,11 +32,11 @@ jobs:
           start: npm run preview
           browser: chrome
           wait-on: http://localhost:4173
-          record: true
-          parallel: true
+          command: node scripts/cypress-ci-run.js
         env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          THIS_RUNNER: ${{ matrix.containers }}
+          TOTAL_RUNNERS: 5
   after_success:
     needs: cypress-run
     runs-on: ubuntu-22.04

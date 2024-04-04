@@ -67,5 +67,3 @@ jobs:
     if: ${{ needs.cypress-run.result == 'success' }}
     steps:
       - name: success
-        uses: script: |
-            const result = 200

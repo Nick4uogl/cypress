@@ -67,3 +67,4 @@ jobs:
     if: ${{ needs.cypress-run.result == 'success' }}
     steps:
       - name: success
+        uses: actions/github-script@v6

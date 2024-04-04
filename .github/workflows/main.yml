@@ -18,7 +18,7 @@ jobs:
         with:
           name: the-build
           if-no-files-found: warn
-          path: build
+          path: dist
           retention-days: 1
 
   cypress-run:
@@ -33,7 +33,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: the-build
-          path: build
+          path: dist
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install packages

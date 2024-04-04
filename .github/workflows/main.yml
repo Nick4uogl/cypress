@@ -3,41 +3,42 @@ name: Cypress Tests
 on: push
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  install:
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Install packages
-        run: npm install --frozen-lockfile
-      - name: Build App
-        run: npm run build
-      - name: Save build folder
-        uses: actions/upload-artifact@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v6
         with:
-          name: the-build
-          if-no-files-found: warn
-          path: cypress
-          retention-days: 1
+          # Disable running of tests within install job
+          runTests: false
+          build: npm run build
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          if-no-files-found: error
+          path: build
 
   cypress-run:
     runs-on: ubuntu-latest
-    needs: build
+    needs: install
     strategy:
       fail-fast: false
       matrix:
         containers: [0, 1]
     steps:
-      - name: Download the build
-        uses: actions/download-artifact@v2
-        with:
-          name: the-build
-          path: cypress
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install packages
-        run: npm install --frozen-lockfile
+
+      - name: Download the build folder
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
       - name: Determine Tests to Run
         id: check_commit_message
         run: |

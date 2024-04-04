@@ -52,6 +52,5 @@ jobs:
           wait-on: http://localhost:4173
           command: node scripts/cypress-ci-run.js
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           THIS_RUNNER: ${{ matrix.containers }}
           TOTAL_RUNNERS: 2

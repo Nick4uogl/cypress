@@ -35,7 +35,7 @@ jobs:
           name: the-build
           path: build
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Install packages
         run: npm install --frozen-lockfile
       - name: Determine Tests to Run
@@ -67,4 +67,5 @@ jobs:
     if: ${{ needs.cypress-run.result == 'success' }}
     steps:
       - name: success
-        uses: actions/gi
+        uses: script: |
+            const result = 200

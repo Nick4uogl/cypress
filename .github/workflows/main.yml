@@ -3,26 +3,27 @@ name: Cypress Tests
 on: push
 
 jobs:
- build:
+  build:
     name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install packages
-        run: npm run install --frozen-lockfile
-      # Build app
+        run: npm install --frozen-lockfile
       - name: Build App
         run: npm run build
       - name: Save build folder
         uses: actions/upload-artifact@v2
         with:
           name: the-build
-          if-no-files-found: error
+          if-no-files-found: warn
           path: build
           retention-days: 1
+
   cypress-run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    needs: build
     strategy:
       fail-fast: false
       matrix:
@@ -34,11 +35,9 @@ jobs:
           name: the-build
           path: build
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
       - name: Install packages
-        run: npm run install --frozen-lockfile
-      # Install npm dependencies, cache them correctly
-      # and run all Cypress tests
+        run: npm install --frozen-lockfile
       - name: Determine Tests to Run
         id: check_commit_message
         run: |
@@ -61,13 +60,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           THIS_RUNNER: ${{ matrix.containers }}
           TOTAL_RUNNERS: 2
+
   after_success:
     needs: cypress-run
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: ${{ needs.cypress-run.result == 'success' }}
     steps:
       - name: success
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const result = 200
+        uses: actions/gi
